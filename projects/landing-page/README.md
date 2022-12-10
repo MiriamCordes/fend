@@ -11,7 +11,7 @@ The folder structure of the landing-page project is as follows:
 │   │   ├── styles.css
 │   ├── index.html
 │   └── js
-        ├── app.js
+│         ├── app.js
 └── README
 ```
 
