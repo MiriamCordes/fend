@@ -97,7 +97,7 @@ function buildSections() {
         sectionElement.appendChild(wrapperElement);
         sectionFragment.appendChild(sectionElement)
     }
-    mainContent.appendChild(sectionFragment);
+    mainContent.append(sectionFragment);
 }
 
 function buildNavbarElement(section) {
@@ -116,10 +116,11 @@ function buildNavbar() {
         const navbarElement = buildNavbarElement(section);
         navbarFragment.appendChild(navbarElement);
     }
-    navbar.appendChild(navbarFragment);
+    navbar.append(navbarFragment);
 }
 
 function onNavbarElementClicked(event) {
+    event.preventDefault();
     const sectionToScrollTo = sections.find(function (section) {
         return section.dataNav == event.target.textContent;
     })
@@ -127,17 +128,16 @@ function onNavbarElementClicked(event) {
     sectionElementToScrollTo.scrollIntoView({ behavior: "smooth" });
 }
 
-function highlightNavBarElement(sectionElement) {
+function highlightNavBarElement() {
     const navbarElements = document.getElementsByTagName('a');
+    const activeSectionElement = document.querySelector('.your-active-class')
     for (navbarElement of navbarElements) {
         if (navbarElement.parentElement.nodeName != "LI") {
             continue;
         }
-        if (navbarElement.textContent != sectionElement.querySelector("h2").textContent) {
-            console.log("active " + navbarElement);
+        if (navbarElement.textContent != activeSectionElement.querySelector("h2").textContent) {
             navbarElement.classList.remove("menu__link__active");
         } else {
-            console.log("not active");
             navbarElement.classList.add("menu__link__active");
         }
     }
@@ -153,7 +153,7 @@ function onDocumentScrolled(event) {
             sectionElement.classList.remove("your-active-class");
         }
     }
-    highlightNavBarElement(sectionElement);
+    highlightNavBarElement();
 }
 
 function setUpEventListeners() {
