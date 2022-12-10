@@ -146,7 +146,7 @@ function highlightNavBarElement() {
 }
 
 // handle document scrolled
-function onDocumentScrolled(event) {
+function onDocumentScrolled() {
     const sectionElements = document.getElementsByTagName('section');
     for (const sectionElement of sectionElements) {
         const box = sectionElement.getBoundingClientRect();
