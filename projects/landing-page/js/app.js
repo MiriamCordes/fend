@@ -112,7 +112,7 @@ function buildNavbarElement(section) {
 function buildNavbar() {
     const navbar = document.getElementById('navbar__list');
     const navbarFragment = document.createDocumentFragment();
-    for(const section of sections) {
+    for (const section of sections) {
         const navbarElement = buildNavbarElement(section);
         navbarFragment.appendChild(navbarElement);
     }
@@ -120,19 +120,48 @@ function buildNavbar() {
 }
 
 function onNavbarElementClicked(event) {
-    console.log(event.target);
-    const sectionToScrollTo = sections.find(function(section) {
-       return section.dataNav == event.target.textContent;
+    const sectionToScrollTo = sections.find(function (section) {
+        return section.dataNav == event.target.textContent;
     })
     const sectionElementToScrollTo = document.getElementById(sectionToScrollTo.id);
-    sectionElementToScrollTo.scrollIntoView({behavior: "smooth"});
+    sectionElementToScrollTo.scrollIntoView({ behavior: "smooth" });
+}
+
+function highlightNavBarElement(sectionElement) {
+    const navbarElements = document.getElementsByTagName('a');
+    for (navbarElement of navbarElements) {
+        if (navbarElement.parentElement.nodeName != "LI") {
+            continue;
+        }
+        if (navbarElement.textContent != sectionElement.querySelector("h2").textContent) {
+            console.log("active " + navbarElement);
+            navbarElement.classList.remove("menu__link__active");
+        } else {
+            console.log("not active");
+            navbarElement.classList.add("menu__link__active");
+        }
+    }
+}
+
+function onDocumentScrolled(event) {
+    const sectionElements = document.getElementsByTagName('section');
+    for (const sectionElement of sectionElements) {
+        const box = sectionElement.getBoundingClientRect();
+        if (box.top <= 150 && box.bottom >= 150) {
+            sectionElement.classList.add("your-active-class");
+        } else {
+            sectionElement.classList.remove("your-active-class");
+        }
+    }
+    highlightNavBarElement(sectionElement);
 }
 
 function setUpEventListeners() {
     const navbarElements = document.getElementsByTagName('li');
-    for(const navbarElement of navbarElements) {
+    for (const navbarElement of navbarElements) {
         navbarElement.addEventListener('click', onNavbarElementClicked);
     }
+    document.addEventListener('scroll', onDocumentScrolled);
 }
 
 buildSections();
