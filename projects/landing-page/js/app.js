@@ -58,7 +58,7 @@ function buildSectionElement(section) {
     sectionElement.id = section.id;
     sectionElement.dataNav = section.dataNav;
     if (section.isActive) {
-        sectionElement.className = "active-section";
+        sectionElement.className = "your-active-class";
     }
     return sectionElement;
 }
@@ -90,7 +90,7 @@ function buildSections() {
     for (const section of sections) {
         const sectionElement = buildSectionElement(section);
         const wrapperElement = buildWrapperElement();
-        const headerElement = buildHeaderElement(section.dataNav);
+        const headerElement = buildHeaderElement(section.header);
         wrapperElement.appendChild(headerElement)
         const paragraphs = buildParagraphElements(section.paragraphs)
         wrapperElement.appendChild(paragraphs);
@@ -100,7 +100,44 @@ function buildSections() {
     mainContent.appendChild(sectionFragment);
 }
 
+function buildNavbarElement(section) {
+    const navbarElement = document.createElement('li');
+    const anchorElement = document.createElement('a');
+    anchorElement.className = "menu__link"
+    anchorElement.textContent = section.header;
+    navbarElement.appendChild(anchorElement);
+    return navbarElement;
+}
+
+function buildNavbar() {
+    const navbar = document.getElementById('navbar__list');
+    const navbarFragment = document.createDocumentFragment();
+    for(const section of sections) {
+        const navbarElement = buildNavbarElement(section);
+        navbarFragment.appendChild(navbarElement);
+    }
+    navbar.appendChild(navbarFragment);
+}
+
+function onNavbarElementClicked(event) {
+    console.log(event.target);
+    const sectionToScrollTo = sections.find(function(section) {
+       return section.dataNav == event.target.textContent;
+    })
+    const sectionElementToScrollTo = document.getElementById(sectionToScrollTo.id);
+    sectionElementToScrollTo.scrollIntoView({behavior: "smooth"});
+}
+
+function setUpEventListeners() {
+    const navbarElements = document.getElementsByTagName('li');
+    for(const navbarElement of navbarElements) {
+        navbarElement.addEventListener('click', onNavbarElementClicked);
+    }
+}
+
 buildSections();
+buildNavbar();
+setUpEventListeners();
 
 
 
